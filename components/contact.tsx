@@ -1,8 +1,8 @@
 import React, { useState } from "react"
-import { Button } from "@nextui-org/react"
+import { Button, Text, VStack } from "@chakra-ui/react"
 
 export default function Contact() {
-  const [email, setEmail] = useState("unknown")
+  const [email, setEmail] = useState("")
 
   const getEmail = async () => {
     try {
@@ -15,9 +15,11 @@ export default function Contact() {
   }
 
   return (
-    <>
-      <p>Contact email: {email}</p>
-      <Button onClick={getEmail}>Get our contact email</Button>
-    </>
+    <VStack spacing={2} m="auto">
+      <Button onClick={getEmail} colorScheme="blue">
+        Get the secret contact email
+      </Button>
+      <Text>{email}</Text>
+    </VStack>
   )
 }

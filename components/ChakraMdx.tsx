@@ -1,9 +1,5 @@
-import { ChakraProvider, Flex, chakra } from "@chakra-ui/react"
-import { AppProps } from "next/app"
-import Head from "next/head"
+import { chakra } from "@chakra-ui/react"
 import { MDXProvider } from "@mdx-js/react"
-
-import "../styles/globals.css"
 
 const MDXComponents = {
   h1: function Heading1(props) {
@@ -47,31 +43,12 @@ const MDXComponents = {
   },
 }
 
-import { Header, Footer } from "../components"
-
-function MyApp({ Component, pageProps }: AppProps) {
-  return (
-    <>
-      <Head>
-        <title>NextJS Workshop</title>
-      </Head>
-      <ChakraProvider>
-        <MDXProvider components={MDXComponents}>
-          <Header />
-          <Flex
-            as="main"
-            flexGrow={1}
-            flexDirection="column"
-            overflowY="scroll"
-            my={8}
-          >
-            <Component {...pageProps} />
-          </Flex>
-          <Footer />
-        </MDXProvider>
-      </ChakraProvider>
-    </>
-  )
+type ChakraMdxProps = {
+  children: React.ReactNode
 }
 
-export default MyApp
+const ChakraMdx = ({ children }: ChakraMdxProps) => {
+  return <MDXProvider components={MDXComponents}>{children}</MDXProvider>
+}
+
+export default ChakraMdx

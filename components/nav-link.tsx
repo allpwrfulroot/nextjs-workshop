@@ -1,29 +1,32 @@
 import React from "react"
-import Link from "next/link"
+import NextLink from "next/link"
 import { useRouter } from "next/router"
-import { styled, Link as StyledLink } from "@nextui-org/react"
+import { Link as ChakraLink } from "@chakra-ui/react"
 
-const SpacedNavLink = styled(StyledLink, {
-  padding: "$4 $8",
-  borderRadius: "$base",
-  "&:hover": {
-    color: "$primary",
-    backgroundColor: "$primaryLightHover",
-  },
-  "&:not(:first-child)": {
-    marginLeft: 20,
-  },
-})
+type NavLinkProps = {
+  href: string
+  children: React.ReactNode
+}
 
-export default function NavLink({ href, children }) {
+export default function NavLink({ href, children }: NavLinkProps) {
   const { pathname } = useRouter()
   const path = pathname.split("/")[1]
   const isActive = path ? href.includes(path) : href === "/"
   return (
-    <Link href={href}>
-      <SpacedNavLink color={isActive ? "primary" : "text"}>
+    <NextLink href={href} passHref>
+      <ChakraLink
+        color={isActive ? "blue.600" : "gray.500"}
+        p={2}
+        marginBottom="-2px !important"
+        borderBottom="2px"
+        borderColor={isActive ? "blue.600" : "transparent"}
+        _hover={{
+          textDecoration: "none",
+          color: "blue.400",
+        }}
+      >
         {children}
-      </SpacedNavLink>
-    </Link>
+      </ChakraLink>
+    </NextLink>
   )
 }

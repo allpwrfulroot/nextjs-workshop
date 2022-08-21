@@ -1,13 +1,12 @@
 import React from "react"
-import { styled } from "@nextui-org/react"
-
-const MainContent = styled("main", {
-  margin: "$4 $8",
-  minHeight: "50vh",
-})
+import { Container } from "@chakra-ui/react"
 
 function Main({ children }) {
-  return <MainContent>{children}</MainContent>
+  return (
+    <Container maxW="container.lg" flexGrow={1}>
+      {children}
+    </Container>
+  )
 }
 
 export default Main
