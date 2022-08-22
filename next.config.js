@@ -1,27 +1,23 @@
 /** @type {import('next').NextConfig} */
 
-// const { remarkCodeHike } = require("@code-hike/mdx")
-// const rehypeAddClasses = require("rehype-add-classes")
-// const theme = require("shiki/themes/github-dark.json")
-
 const withMDX = require("@next/mdx")({
   extension: /\.mdx?$/,
-  // options: {
-  //   remarkPlugins: [[remarkCodeHike, { theme }]],
-  //   rehypePlugins: [],
-  // If you use `MDXProvider`, uncomment the following line.
-  // providerImportSource: "@mdx-js/react",
-  // },
 })
 
-module.exports = withMDX({
+const withBundleAnalyzer = require("@next/bundle-analyzer")({
+  enabled: process.env.ANALYZE === "true",
+  generateStatsFile: true,
+})
+
+const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
-  // Append the default value with md extensions
-  pageExtensions: ["ts", "tsx", "mdx"],
-})
+}
 
-// module.exports = {
-//   reactStrictMode: true,
-//   swcMinify: true,
-// }
+module.exports = (_phase, { defaultConfig }) => {
+  const plugins = [withBundleAnalyzer, withMDX]
+  return plugins.reduce((acc, plugin) => plugin(acc), {
+    ...defaultConfig,
+    ...nextConfig,
+  })
+}

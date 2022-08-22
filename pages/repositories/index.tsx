@@ -6,9 +6,21 @@ import {
   Link as ChakraLink,
   UnorderedList,
   ListItem,
+  Text,
 } from "@chakra-ui/react"
+import { formatDistanceToNow } from "date-fns"
 
-function RepoList({ username, repos }) {
+function RepoList({ username, repos, fetched_at }) {
+  const [timeAgo, setTimeAgo] = React.useState("")
+
+  React.useEffect(() => {
+    const ago = formatDistanceToNow(fetched_at, {
+      includeSeconds: true,
+      addSuffix: true,
+    })
+    setTimeAgo(ago)
+  }, [fetched_at])
+
   return (
     <Stack spacing={2}>
       <Heading color="blue.500">
@@ -23,6 +35,7 @@ function RepoList({ username, repos }) {
           </ListItem>
         ))}
       </UnorderedList>
+      <Text>Fetched at: {timeAgo}</Text>
     </Stack>
   )
 }
@@ -36,9 +49,11 @@ export async function getServerSideProps() {
       },
     }
   )
+  // console.log("fetched list!")
   const repos = await reposList.json()
+  const fetched_at = Date.now()
   return {
-    props: { repos, username: process.env.GITHUB_USERNAME }, // will be passed to the page component as props
+    props: { repos, username: process.env.GITHUB_USERNAME, fetched_at }, // will be passed to the page component as props
   }
 }
 

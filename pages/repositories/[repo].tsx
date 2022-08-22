@@ -1,9 +1,19 @@
 import React from "react"
 import { useRouter } from "next/router"
-import { Heading, Stack, Text } from "@chakra-ui/react"
+import { Box, Button, Heading, Stack, Text } from "@chakra-ui/react"
+import { formatDistanceToNow } from "date-fns"
 
-function RepoDetails({ name, stars, language, created_at }) {
-  const { isFallback } = useRouter()
+function RepoDetails({ name, stars, language, created_at, fetched_at }) {
+  const { isFallback, back } = useRouter()
+  const [timeAgo, setTimeAgo] = React.useState("")
+
+  React.useEffect(() => {
+    const ago = formatDistanceToNow(fetched_at, {
+      includeSeconds: true,
+      addSuffix: true,
+    })
+    setTimeAgo(ago)
+  }, [fetched_at])
 
   if (isFallback) {
     return <Text color="gray.400">Loading...</Text>
@@ -15,13 +25,17 @@ function RepoDetails({ name, stars, language, created_at }) {
       <Text>Language: {language}</Text>
       <Text>Stars: {stars}</Text>
       <Text>Created at: {created_at}</Text>
+      <Text>Fetched at: {timeAgo}</Text>
+      <Box>
+        <Button onClick={back}>Back</Button>
+      </Box>
     </Stack>
   )
 }
 
 export async function getStaticProps(context) {
   const { params } = context
-  // console.log("params", params)
+  // console.log("fetched!")
   const res = await fetch(
     `https://api.github.com/repos/${process.env.GITHUB_USERNAME}/${params.repo}`,
     {
@@ -37,15 +51,15 @@ export async function getStaticProps(context) {
     throw new Error(`Failed to fetch repo info, received status ${res.status}`)
   }
   const json = await res.json()
-  // console.log("found: ", json)
   return {
     props: {
       stars: json.stargazers_count,
       name: json.name,
       language: json.language,
       created_at: json.created_at,
+      fetched_at: Date.now(),
     },
-    revalidate: 5000,
+    // revalidate: 5000,
   }
 }
 
