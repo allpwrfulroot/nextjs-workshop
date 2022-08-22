@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Stack, Button, Link as ChakraLink, Text } from "@chakra-ui/react"
+import { Stack, Link as ChakraLink, Text } from "@chakra-ui/react"
 
 export default function Mobile() {
   return (

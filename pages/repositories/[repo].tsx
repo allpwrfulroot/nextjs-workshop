@@ -21,7 +21,7 @@ function RepoDetails({ name, stars, language, created_at }) {
 
 export async function getStaticProps(context) {
   const { params } = context
-  console.log("params", params)
+  // console.log("params", params)
   const res = await fetch(
     `https://api.github.com/repos/${process.env.GITHUB_USERNAME}/${params.repo}`,
     {
@@ -37,7 +37,7 @@ export async function getStaticProps(context) {
     throw new Error(`Failed to fetch repo info, received status ${res.status}`)
   }
   const json = await res.json()
-  console.log("found: ", json)
+  // console.log("found: ", json)
   return {
     props: {
       stars: json.stargazers_count,
@@ -59,10 +59,10 @@ export async function getStaticPaths() {
     }
   )
   const json = await reposList.json()
-  const topTen = json.length ? json.splice(0, 10) : []
-  const topPaths = topTen.map((t) => ({ params: { repo: t.name } }))
+  const topThree = json.length ? json.splice(0, 3) : []
+  const topPaths = topThree.map((t) => ({ params: { repo: t.name } }))
   return {
-    paths: topPaths, // prerendering the first 10 repos from list
+    paths: topPaths, // prerendering the first 3 repos from list
     fallback: true, // true because some possible paths not prerendered
   }
 }
