@@ -1,6 +1,5 @@
 import React, { useState } from "react"
-import { Text, VStack } from "@chakra-ui/react"
-import { Button } from "../stories/Button"
+import { Button, Text, VStack } from "@chakra-ui/react"
 
 export default function Contact() {
   const [email, setEmail] = useState("")
@@ -17,7 +16,7 @@ export default function Contact() {
 
   return (
     <VStack spacing={2} m="auto">
-      <Button onClick={getEmail} label="Get the secret email" />
+      <Button onClick={getEmail}>Get the secret email</Button>
       <Text>{email}</Text>
     </VStack>
   )

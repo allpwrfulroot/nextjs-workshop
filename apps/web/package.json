@@ -1,37 +1,35 @@
 {
-  "name": "nextjs-workshop",
+  "name": "web",
   "version": "0.1.0",
-  "description": "Demo monorepo with a web app, documentation site, and a UI library using Storybook",
   "private": true,
   "scripts": {
-    "clean": "turbo run clean && rm -rf node_modules",
-    "build": "turbo run build",
-    "storybook": "turbo run storybook --parallel",
-    "dev": "turbo run dev --parallel",
-    "lint": "turbo run lint"
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
   },
-  "workspaces": [
-    "apps/*",
-    "packages/*"
-  ],
   "dependencies": {
     "@chakra-ui/react": "^2.2.8",
     "@emotion/react": "^11",
     "@emotion/styled": "^11",
     "@mdx-js/loader": "^1.6.22",
     "@mdx-js/react": "^1.6.22",
+    "@next/mdx": "^12.2.5",
+    "date-fns": "^2.29.2",
+    "framer-motion": "^7.2.0",
     "next": "12.2.2",
     "react": "18.2.0",
     "react-dom": "18.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.18.10",
+    "@next/bundle-analyzer": "^12.2.5",
     "@types/node": "^18.0.6",
     "@types/react": "^18.0.15",
     "eslint": "8.20.0",
     "eslint-config-next": "12.2.2",
+    "eslint-plugin-storybook": "^0.6.3",
     "prettier": "^2.7.1",
-    "turbo": "^1.4.3",
     "typescript": "^4.7.4"
   }
 }

@@ -1,0 +1,27 @@
+{
+  "name": "docs",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev -p 3001",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "next": "*",
+    "nextra": "^1.1.0",
+    "nextra-theme-docs": "^1.2.6",
+    "react": "*",
+    "react-dom": "*"
+  },
+  "devDependencies": {
+    "@babel/core": "*",
+    "@types/node": "*",
+    "@types/react": "*",
+    "eslint": "*",
+    "eslint-config-next": "*",
+    "prettier": "*",
+    "typescript": "*"
+  }
+}
