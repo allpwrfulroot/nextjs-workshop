@@ -1,34 +1,71 @@
-This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Middleware - modify a request
 
-## Getting Started
+https://nextjs.org/docs/advanced-features/middleware
 
-First, run the development server:
+> Middleware allows you to run code before a request is completed, then based on the incoming request, you can modify the response by rewriting, redirecting, adding headers, or setting cookies.
 
-```bash
-npm run dev
-# or
-yarn dev
+> Middleware runs before cached content, so you can personalize static files and pages. Common examples of Middleware would be authentication, A/B testing, localized pages, bot protection, and more. Regarding localized pages, you can start with i18n routing and implement Middleware for more advanced use cases.
+
+NOTES: One middleware function per app, but can have many different responses. Be careful of complexity!
+
+```./middleware.ts
+import { NextResponse, userAgent } from "next/server"
+import type { NextRequest } from "next/server"
+
+export function middleware(request: NextRequest) {
+  const { device } = userAgent(request)
+  const { pathname } = request.nextUrl
+  if (device.type === "mobile") {
+    return NextResponse.redirect(new URL("/mobile", request.url))
+  }
+  return NextResponse.next()
+}
+
+export const config = {
+  matcher: "/about",
+}
+
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+# Revalidate - push an update
 
-You can start editing the page by modifying `pages/index.js`. The page auto-updates as you edit the file.
+https://nextjs.org/docs/basic-features/data-fetching/incremental-static-regeneration
 
-[API routes](https://nextjs.org/docs/api-routes/introduction) can be accessed on [http://localhost:3000/api/hello](http://localhost:3000/api/hello). This endpoint can be edited in `pages/api/hello.js`.
+> Incremental Static Regeneration (ISR) enables you to use static-generation on a per-page basis, without needing to rebuild the entire site
 
-The `pages/api` directory is mapped to `/api/*`. Files in this directory are treated as [API routes](https://nextjs.org/docs/api-routes/introduction) instead of React pages.
+```./pages/api/revalidate.ts
+export default async function handler(req, res) {
+  console.log("req?", req)
+  // Check for secret to confirm this is a valid request
+  if (req.query.secret !== process.env.MY_SECRET_REVALIDATION_TOKEN) {
+    return res.status(401).json({ message: "Invalid token" })
+  }
 
-## Learn More
+  try {
+    // this should be the actual path not a rewritten path
+    // e.g. for "/blog/[slug]" this should be "/blog/post-1"
+    await res.revalidate(`/repositories/${req.query.name}`)
+    return res.json({ revalidated: true })
+  } catch (err) {
+    // If there was an error, Next.js will continue
+    // to show the last successfully generated page
+    return res.status(500).send("Error revalidating")
+  }
+}
+```
 
-To learn more about Next.js, take a look at the following resources:
+```./pages/mobile.tsx
+import Link from "next/link"
+import { Stack, Link as ChakraLink, Text } from "@chakra-ui/react"
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js/) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/deployment) for more details.
+export default function Mobile() {
+  return (
+    <Stack spacing={4} alignItems="center">
+      <Text>The About page is desktop only, sorry!</Text>
+      <Link href="/" passHref>
+        <ChakraLink color="blue.500">Go to Home</ChakraLink>
+      </Link>
+    </Stack>
+  )
+}
+```
