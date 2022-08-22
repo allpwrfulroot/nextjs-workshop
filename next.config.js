@@ -12,10 +12,11 @@ const withBundleAnalyzer = require("@next/bundle-analyzer")({
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
+  pageExtensions: ["ts", "tsx", "js", "jsx", "md", "mdx"],
 }
 
 module.exports = (_phase, { defaultConfig }) => {
-  const plugins = [withBundleAnalyzer, withMDX]
+  const plugins = [withMDX, withBundleAnalyzer]
   return plugins.reduce((acc, plugin) => plugin(acc), {
     ...defaultConfig,
     ...nextConfig,
