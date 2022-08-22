@@ -1,8 +1,8 @@
-import { ChakraProvider, Flex } from "@chakra-ui/react"
+import { ChakraProvider } from "@chakra-ui/react"
 import { AppProps, NextWebVitalsMetric } from "next/app"
 
 import "../styles/globals.css"
-import { Header, Footer } from "../components"
+import { Header, Footer, Main } from "../components"
 
 export function reportWebVitals(metric: NextWebVitalsMetric) {
   console.log(metric)
@@ -12,15 +12,9 @@ function MyApp({ Component, pageProps }: AppProps) {
   return (
     <ChakraProvider>
       <Header />
-      <Flex
-        as="main"
-        flexGrow={1}
-        flexDirection="column"
-        overflowY="scroll"
-        py={8}
-      >
+      <Main>
         <Component {...pageProps} />
-      </Flex>
+      </Main>
       <Footer />
     </ChakraProvider>
   )

@@ -16,6 +16,3 @@ export default async function handler(req, res) {
     return res.status(500).send("Error revalidating")
   }
 }
-
-// https://nextjs-workshop-orcin.vercel.app/api/revalidate?secret=supersecretrevaltoken&name=snorkel-demo
-// http:localhost:3000/api/revalidate?secret=supersecretrevaltoken&name=snorkel-demo

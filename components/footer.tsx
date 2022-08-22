@@ -10,7 +10,9 @@ function Footer() {
       borderTop="2px"
       borderColor="gray.100"
     >
-      <Text p={2}>Made with &#9825; in Boston</Text>
+      <Text color="gray.500" p={2}>
+        Made with &#9825; in Boston
+      </Text>
     </Box>
   )
 }

@@ -1,11 +1,17 @@
 import React from "react"
-import { Container } from "@chakra-ui/react"
+import { Flex } from "@chakra-ui/react"
 
 function Main({ children }) {
   return (
-    <Container maxW="container.lg" flexGrow={1}>
+    <Flex
+      as="main"
+      flexGrow={1}
+      flexDirection="column"
+      overflowY="scroll"
+      py={8}
+    >
       {children}
-    </Container>
+    </Flex>
   )
 }
 
